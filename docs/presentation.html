@@ -108,13 +108,23 @@
 
     <script>
         // ============================================================
-        // CONFIGURATION
+        // CONFIGURATION - Change these values as needed
         // ============================================================
+        
+        // Refresh the entire presentation every X minutes
         const REFRESH_INTERVAL_MINUTES = 5;
+        
+        // Slide auto-advance time in milliseconds (matches the delayms in the embed URL)
+        const SLIDE_ADVANCE_MS = 15000;
+        
+        // Auto-enter fullscreen on page load
         const AUTO_FULLSCREEN = true;
         
         // ============================================================
+        // Don't edit below this line
+        // ============================================================
         
+        // Fullscreen functionality
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         const refreshInfo = document.getElementById('refresh-info');
         
