@@ -18,12 +18,12 @@
             background-color: #000;
         }
 
-        #presentation-container {
+        #presentation-wrapper {
             width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: calc(100vh - 40px);
+            margin: 0 auto;
+            position: relative;
+            clip-path: inset(0 0 40px 0);
         }
 
         iframe {
@@ -32,17 +32,27 @@
             border: none;
         }
 
+        #bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: #000;
+            z-index: 1000;
+        }
+
         #refresh-info {
             position: fixed;
-            bottom: 10px;
+            bottom: 8px;
             right: 10px;
             background: rgba(0, 0, 0, 0.7);
             color: #fff;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-family: sans-serif;
-            font-size: 12px;
-            z-index: 1000;
+            font-size: 11px;
+            z-index: 1001;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
@@ -59,11 +69,11 @@
             background: rgba(0, 0, 0, 0.7);
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 4px;
             cursor: pointer;
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             z-index: 1001;
             opacity: 0;
             transition: opacity 0.3s;
@@ -74,34 +84,17 @@
             opacity: 1;
         }
 
-        .fullscreen-hide {
-            display: none !important;
-        }
-
-        /* Overlay to hide Google Slides bottom bar */
-        #bottom-overlay {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background: #000;
-            z-index: 1002;
-            pointer-events: none;
-        }
-
         /* Show controls on mouse move */
         body.show-controls #fullscreen-btn,
         body.show-controls #refresh-info {
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: auto;
         }
     </style>
 </head>
 <body>
     <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-    <div id="bottom-overlay"></div>
-    <div id="presentation-container">
+    <div id="presentation-wrapper">
         <iframe 
             id="slide-iframe"
             src="https://docs.google.com/presentation/d/e/2PACX-1vRmUyMUw11htw-L4ReAHAySNhPgeNkjrhPMJJZbA9hm13uIfyGXnsWdlhJcxrNiZ16f3GFAQy2WEmsQ/embed?start=true&loop=true&delayms=15000" 
@@ -109,25 +102,19 @@
             loading="lazy"
         ></iframe>
     </div>
+    <div id="bottom-bar"></div>
 
-    <div id="refresh-info">Auto-refresh: every 5 min | Next in: <span id="countdown">300</span>s</div>
+    <div id="refresh-info">Auto-refresh: every 5 min</div>
 
     <script>
         // ============================================================
-        // CONFIGURATION - Change these values as needed
+        // CONFIGURATION
         // ============================================================
-        
-        // Refresh interval in minutes
         const REFRESH_INTERVAL_MINUTES = 5;
-        
-        // Auto-enter fullscreen on load
         const AUTO_FULLSCREEN = true;
         
         // ============================================================
-        // Don't edit below this line
-        // ============================================================
         
-        // Fullscreen functionality
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         const refreshInfo = document.getElementById('refresh-info');
         
@@ -142,14 +129,11 @@
         document.addEventListener('fullscreenchange', () => {
             if (document.fullscreenElement) {
                 fullscreenBtn.textContent = '⛶ Exit Fullscreen';
-                refreshInfo.classList.add('fullscreen-hide');
             } else {
                 fullscreenBtn.textContent = '⛶ Fullscreen';
-                refreshInfo.classList.remove('fullscreen-hide');
             }
         });
         
-        // Auto-fullscreen on page load
         if (AUTO_FULLSCREEN) {
             window.addEventListener('load', () => {
                 setTimeout(() => {
@@ -171,29 +155,18 @@
         const REFRESH_INTERVAL_SECONDS = REFRESH_INTERVAL_MINUTES * 60;
         let countdownValue = REFRESH_INTERVAL_SECONDS;
         
-        const countdownEl = document.getElementById('countdown');
-        const refreshInfoEl = document.getElementById('refresh-info');
-        
-        // Update the refresh info text
-        refreshInfoEl.innerHTML = `Auto-refresh: every ${REFRESH_INTERVAL_MINUTES} min | Next in: <span id="countdown">${REFRESH_INTERVAL_SECONDS}</span>s`;
-        
         // Countdown timer
         const countdownInterval = setInterval(() => {
             countdownValue--;
             if (countdownValue <= 0) {
                 countdownValue = REFRESH_INTERVAL_SECONDS;
             }
-            const span = document.getElementById('countdown');
-            if (span) {
-                span.textContent = countdownValue;
-            }
         }, 1000);
         
         // Auto-refresh the iframe
         setInterval(() => {
             const iframe = document.getElementById('slide-iframe');
-            const currentSrc = iframe.src;
-            iframe.src = currentSrc;
+            iframe.src = iframe.src;
             countdownValue = REFRESH_INTERVAL_SECONDS;
             console.log(`Presentation refreshed at ${new Date().toLocaleTimeString()}`);
         }, REFRESH_INTERVAL_SECONDS * 1000);
