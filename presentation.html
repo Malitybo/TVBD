@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Slides Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #refresh-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: sans-serif;
+            font-size: 12px;
+            z-index: 1000;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        #refresh-info:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation-container">
+        <iframe 
+            id="slide-iframe"
+            src="https://docs.google.com/presentation/d/e/2PACX-1vRmUyMUw11htw-L4ReAHAySNhPgeNkjrhPMJJZbA9hm13uIfyGXnsWdlhJcxrNiZ16f3GFAQy2WEmsQ/embed?start=true&loop=true&delayms=15000" 
+            allowfullscreen="allowfullscreen"
+            loading="lazy"
+        ></iframe>
+    </div>
+
+    <div id="refresh-info">Auto-refresh: every 5 min | Next in: <span id="countdown">300</span>s</div>
+
+    <script>
+        // ============================================================
+        // CONFIGURATION - Change these values as needed
+        // ============================================================
+        
+        // Refresh interval in minutes
+        const REFRESH_INTERVAL_MINUTES = 5;
+        
+        // ============================================================
+        // Don't edit below this line
+        // ============================================================
+        
+        const REFRESH_INTERVAL_SECONDS = REFRESH_INTERVAL_MINUTES * 60;
+        let countdownValue = REFRESH_INTERVAL_SECONDS;
+        
+        const countdownEl = document.getElementById('countdown');
+        const refreshInfoEl = document.getElementById('refresh-info');
+        
+        // Update the refresh info text
+        refreshInfoEl.innerHTML = `Auto-refresh: every ${REFRESH_INTERVAL_MINUTES} min | Next in: <span id="countdown">${REFRESH_INTERVAL_SECONDS}</span>s`;
+        
+        // Countdown timer
+        const countdownInterval = setInterval(() => {
+            countdownValue--;
+            if (countdownValue <= 0) {
+                countdownValue = REFRESH_INTERVAL_SECONDS;
+            }
+            const span = document.getElementById('countdown');
+            if (span) {
+                span.textContent = countdownValue;
+            }
+        }, 1000);
+        
+        // Auto-refresh the iframe
+        setInterval(() => {
+            const iframe = document.getElementById('slide-iframe');
+            // Force reload by setting src to itself with a timestamp
+            const currentSrc = iframe.src;
+            iframe.src = currentSrc;
+            countdownValue = REFRESH_INTERVAL_SECONDS;
+            console.log(`Presentation refreshed at ${new Date().toLocaleTimeString()}`);
+        }, REFRESH_INTERVAL_SECONDS * 1000);
+    </script>
+</body>
+</html>
