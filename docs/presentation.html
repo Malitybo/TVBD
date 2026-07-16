@@ -104,7 +104,7 @@
     </div>
     <div id="bottom-bar"></div>
 
-    <div id="refresh-info">Auto-refresh: every 5 min</div>
+    <div id="refresh-info"></div>
 
     <script>
         // ============================================================
@@ -127,6 +127,9 @@
         // Fullscreen functionality
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         const refreshInfo = document.getElementById('refresh-info');
+        
+        // Update refresh info text with correct config value
+        refreshInfo.textContent = 'Auto-refresh: every ' + REFRESH_INTERVAL_MINUTES + ' min';
         
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
