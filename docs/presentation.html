@@ -127,7 +127,7 @@
         // ============================================================
         
         // Refresh the entire presentation every X minutes
-        const REFRESH_INTERVAL_MINUTES = 5;
+        const REFRESH_INTERVAL_MINUTES = 1;
         
         // Slide auto-advance time in milliseconds (matches the delayms in the embed URL)
         const SLIDE_ADVANCE_MS = 20000;
@@ -191,12 +191,10 @@
             }
         }, 1000);
         
-        // Auto-refresh the iframe
+        // Auto-refresh the entire page (picks up both slide changes and code changes)
         setInterval(() => {
-            const iframe = document.getElementById('slide-iframe');
-            iframe.src = iframe.src;
-            countdownValue = REFRESH_INTERVAL_SECONDS;
-            console.log(`Presentation refreshed at ${new Date().toLocaleTimeString()}`);
+            location.reload();
+            console.log(`Page refreshed at ${new Date().toLocaleTimeString()}`);
         }, REFRESH_INTERVAL_SECONDS * 1000);
     </script>
 </body>
