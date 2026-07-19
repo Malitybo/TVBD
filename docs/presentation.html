@@ -90,6 +90,21 @@
             opacity: 0.6;
             pointer-events: auto;
         }
+
+        /* Subtle opacity pulse to prevent TV from detecting a completely static frame.
+           The animation is nearly imperceptible so it won't distract during presentations. */
+        @keyframes static-prevent {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.995; }
+        }
+        #static-prevent {
+            position: fixed;
+            inset: 0;
+            background: transparent;
+            animation: static-prevent 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -97,7 +112,7 @@
     <div id="presentation-wrapper">
         <iframe 
             id="slide-iframe"
-            src="https://docs.google.com/presentation/d/e/2PACX-1vRmUyMUw11htw-L4ReAHAySNhPgeNkjrhPMJJZbA9hm13uIfyGXnsWdlhJcxrNiZ16f3GFAQy2WEmsQ/embed?start=true&loop=true&delayms=15000" 
+            src="https://docs.google.com/presentation/d/e/2PACX-1vRmUyMUw11htw-L4ReAHAySNhPgeNkjrhPMJJZbA9hm13uIfyGXnsWdlhJcxrNiZ16f3GFAQy2WEmsQ/embed?start=true&loop=true&delayms=20000" 
             allowfullscreen="allowfullscreen"
             loading="lazy"
         ></iframe>
